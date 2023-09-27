@@ -35,7 +35,8 @@ function reducer(state, action){
       case 'city/created':
         return {
           ...state, isLoading : false,
-            cities:[...state.cities , action.payload]
+            cities:[...state.cities , action.payload],
+            currentCity: action.payload,
         }
 
       case 'city/deleted':
@@ -43,6 +44,7 @@ function reducer(state, action){
           ...state,
           isLoading: false,
           cities: state.cities.filter((city) => city.id !== action.payload),
+          currentCity:{}
         }
 
       case "rejected":
@@ -57,7 +59,7 @@ function reducer(state, action){
 }
 function CitiesProvider({children}){
 
-  const [{cities , isLoading , currentCity}, dispatch] = useReducer(reducer , innitialState);
+  const [{cities , isLoading , currentCity , error}, dispatch] = useReducer(reducer , innitialState);
     // const [cities , setCities] = useState([]);
     // const [isLoading , setIsLoading] = useState(false);
     // const [currentCity , setCurrentCity] =useState({});
@@ -106,7 +108,7 @@ function CitiesProvider({children}){
         }
             });
       const data = await res.json();
-      dispatch({type: "cities/created", payload: data})
+      dispatch({type: "city/created", payload: data})
     }catch{
       dispatch({
         type:"rejected",
@@ -122,7 +124,7 @@ function CitiesProvider({children}){
         method:"DELETE",
             });
       // 
-      dispatch({type:"city/delete" , payload: id})
+      dispatch({type:"city/deleted" , payload: id})
     }catch{
       dispatch({
         type:"rejected",
@@ -136,6 +138,7 @@ function CitiesProvider({children}){
             cities , 
             isLoading,
             currentCity,
+            error,
             getCity,
             createCity,
             deleteCity

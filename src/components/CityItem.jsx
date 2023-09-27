@@ -11,13 +11,13 @@ new Intl.DateTimeFormat("en" ,{
 }).format(new Date(date));
 const CityItem = ({city}) => {
   const {currentCity , deleteCity} = useCities();
+  const { cityName , emoji , date , id , position } = city;
   console.log(city);
 
   function handleClick(e){
     e.preventDefault();
     deleteCity(id);
   }
-  const { cityName , emoji , date , id , position } = city;
   return (
     <li>
       <Link  className={`${styles.cityItem} ${id === currentCity.id ? styles["cityItem--active"] : ""}`} to={`${id}?lat=${position.lat}&lng=${position.lng}`}>
